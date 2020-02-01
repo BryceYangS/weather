@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board.mapper.tab.TabMapper">
+	<select id="selectTabList" resultType="board.dto.tab.TabDto">
+		<![CDATA[
+				SELECT tab_idx,
+					   tab_id,
+					   tab_uri,
+					   tab_name
+				FROM t_tab
+				ORDER BY tab_idx ASC
+		]]>
+	</select>
+	
+	<insert id="insertTab" parameterType="board.dto.tab.TabDto">
+		<![CDATA[
+			INSERT INTO t_tab(
+				tab_idx,
+				tab_id,
+				tab_uri,
+				tab_name
+				)
+			VALUES(
+				#{tabIdx},
+				#{tabId},
+				#{tabUri},
+				#{tabName}
+				)
+		]]>
+	</insert>
+</mapper>

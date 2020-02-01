@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>영역 및 지점 개인화 테스트 페이지</title>
+
+   	<link rel="stylesheet" th:href="@{/css/leaflet/leaflet.css}"/>
+
+    <script src="/webjars/jquery/3.4.1/jquery.js"></script>
+	<script th:src="@{/js/leaflet/leaflet-src.js}"></script>
+
+	<script th:src="@{/js/leaflet-draw/Leaflet.draw.js}"></script>
+	<script th:src="@{/js/leaflet-draw/Leaflet.Draw.Event.js}"></script>
+	<script th:src="@{/js/leaflet-draw/ext/TouchEvents.js}"></script>
+	<script th:src="@{/js/leaflet-draw/edit/handler/Edit.Poly.js}"></script>
+	<script th:src="@{/js/leaflet-draw/edit/handler/Edit.SimpleShape.js}"></script>
+	<script th:src="@{/js/leaflet-draw/edit/handler/Edit.Rectangle.js}"></script>
+	<script th:src="@{/js/leaflet-draw/edit/handler/Edit.Marker.js}"></script>
+	<script th:src="@{/js/leaflet-draw/edit/handler/Edit.CircleMarker.js}"></script>
+	<script th:src="@{/js/leaflet-draw/edit/handler/Edit.Circle.js}"></script>	
+	
+	<!-- TestData -->
+	<script th:src="@{/js/personal/cityTestData.js}"></script>	
+	
+</head>
+<script type="text/javascript">
+var data=[
+	"지점-테스트0","지점-테스트1","지점-테스트2",
+	"지점-테스트3","지점-테스트4","지점-테스트5",
+	"지점-테스트6","지점-테스트7","지점-테스트8",
+	"지점-테스트9","지점-테스트10","지점-테스트11",
+	"지점-테스트12","지점-테스트13","지점-테스트14",
+	"지점-테스트15","지점-테스트16","지점-테스트17",
+	"지점-테스트18","지점-테스트19","지점-테스트20",
+	"지점-테스트21","지점-테스트22","지점-테스트23",
+	"지점-테스트24","지점-테스트25","지점-테스트26",
+	"지점-테스트27"
+	];
+
+
+$(document).ready(function(){
+	var fstDivIdx, sndDivIdx, trdDivIdx;
+	var dataCnt = data.length;
+	var dataCntInOneDiv = parseInt(dataCnt / 3);
+	var rest = dataCnt % 3;
+	
+	if(rest == 0){
+		fstDivIdx = dataCntInOneDiv;
+		sndDivIdx = fstDivIdx + dataCntInOneDiv;
+		trdDivIdx = sndDivIdx + dataCntInOneDiv;
+	}else if(rest == 1){
+		fstDivIdx = dataCntInOneDiv + 1;
+		sndDivIdx = fstDivIdx + dataCntInOneDiv;
+		trdDivIdx = sndDivIdx + dataCntInOneDiv;
+	}else{
+		fstDivIdx = dataCntInOneDiv + 1;
+		sndDivIdx = fstDivIdx + dataCntInOneDiv + 1;
+		trdDivIdx = sndDivIdx + dataCntInOneDiv;
+	}
+	
+	var childDivHtml = "";
+	childDivHtml = "<div style='float:left;width:33%;'>"
+	for(var i=0; i < dataCnt; i++){
+		if(i < fstDivIdx){
+			childDivHtml += "<strong>" + data[i] + "</strong><br/>";
+		}else if(fstDivIdx < i && i < sndDivIdx){
+			childDivHtml += "<strong>" + data[i] + "</strong><br/>";
+		}else if(sndDivIdx < i && i < trdDivIdx){
+			childDivHtml += "<strong>" + data[i] + "</strong><br/>";
+		}else if(i == fstDivIdx|| i == sndDivIdx){
+			childDivHtml += "</div>";  
+			childDivHtml += "<div style='float:left;width:33%;'>"
+			childDivHtml += "<strong>" + data[i] + "</strong><br/>";
+		}
+	}
+	childDivHtml += "</div>";
+	$('#outerDiv').append($(childDivHtml));
+	
+	
+	$.ajax({
+		url:"/personal/selectIntDstList.do",
+		success:function(data){
+			var intDstSel = document.getElementById('intDstSelect');
+						
+			data.forEach(function(e){
+				var opt = document.createElement('option');
+				opt.setAttribute('value', e.intDstId);
+				opt.innerText = e.intDstName;
+				intDstSel.appendChild(opt);
+			});
+			
+			selectIntDstDetail(data[0].intDstId);
+		}
+	});
+	
+});
+</script>
+<body>
+	<table border="1">
+		<tr>
+			<td><select id="intDstSelect" onchange="javascript:selectIntDstDetail(this.value);"></select></td>
+			<td><input id="intDstName" type="text"></td>
+			<td colspan="4" align="right"><input type="button" value="신규">
+			<input type="button" value="저장">
+			<input type="button" value="지점설정">
+			<input type="button" value="삭제"></td>
+		</tr>
+		<tr>
+			<td>중심위도</td>
+			<td><input id="cntLat" type="text" style="background-color: #e2e2e2;" readonly value="36.846792"></td>
+			<td>중심경도</td>
+			<td><input id="cntLon" type="text" style="background-color: #e2e2e2;" readonly value="127.924211"></td>
+			<td>줌레벨</td>
+			<td><input id="zoomLvl" type="text" style="background-color: #e2e2e2;" readonly value="6"></td>
+		</tr>
+	</table>
+	
+	
+		<div id="map" style="width: 800px; height: 450px; border: 1px solid #ccc"></div>
+		<div id="outerDiv" style="width:800px;height:100px;overflow:auto;border-color:red; border:1pt;">
+		</div>
+	<script th:src="@{/js/personal/setUserArea.js}"></script>
+		
+</body>
+</html>

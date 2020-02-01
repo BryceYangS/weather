@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Welcome Yang's World</title>
+	<link rel="stylesheet" th:href="@{/css/style_yang.css}"/>
+	<script src="/webjars/jquery/3.4.1/jquery.js"></script>
+	<script>
+		$(document).ready(function(){
+// 			var iframe01 = document.getElementById("iframe01");
+// 			iframe01.style.height=window.screen.innerHeight;
+// 			iframe01.style.width=window.screen.innerWidth;
+			$('#contents').width(window.innerWidth);
+			$('#contents').height(window.innerHeight - 100);
+		});
+		document.addEventListener("DOMContentLoaded", function(){
+		    
+		    $('#nav').children('li').first().children('a').addClass('active')
+		        .next().addClass('is-open').show();
+		        
+		    $('#nav').on('click', 'li > a', function() {
+		        
+		      if (!$(this).hasClass('active')) {
+	
+		        $('#nav .is-open').removeClass('is-open').hide();
+		        $(this).next().toggleClass('is-open').toggle();
+		          
+		        $('#nav').find('.active').removeClass('active');
+		        $(this).addClass('active');
+		      } else {
+		        $('#nav .is-open').removeClass('is-open').hide();
+		        $(this).removeClass('active');
+		      }
+		   });
+		});
+		
+		function f_doSubmit(id){
+			//var tabIdx = $('#nav li').length+1;
+			//$('#tabIdx').val(tabIdx);
+			
+			//var li = document.createElement('li');
+
+			//$('#tabId').val(id);
+			//$('#tabName').val(document.getElementById(id).text);
+			var uri;
+			 if(id==="forecast"){
+				uri = "/leaflet/openLeaflet.do";
+			}else if(id ==="map"){
+				uri = "/leaflet/map.do";	
+			}else if(id==="personal"){
+				uri="/personal/personal.do";
+			}
+			//$('tabIdx').val(tabIdx);
+			
+			//Tab메뉴 추가
+			//li.innerHTML += "<input type='hidden' id='tabIdx" + tabIdx + "' name='tabIdx" + tabIdx + "' value=" + tabIdx + "> </a>";
+			//document.getElementById('nav').appendChild(li);
+			
+			//innerframe에 html 파일 띄우기 위해
+			document.frm.target="iframe01";
+			//document.frm.action="/tab/insertTab.do";
+			document.frm.action=uri;
+			document.frm.submit();
+		}
+		
+		function f_openTab(id){
+			if(id==="boardList"){
+				//innerframe에 html 파일 띄우기 위해
+				document.frm.target="iframe01";
+				document.frm.action="/board/openBoardList.do";
+				document.frm.submit();
+			}else if(id==="boardWrite"){
+				document.frm.target="iframe01";
+				document.frm.action="/board/openBoardWrite.do";
+				document.frm.submit();
+			}
+		}
+	
+	</script>
+	<style>
+		h1 {color:red;}
+		p {color:blue;}
+	</style>
+</head>
+<body>
+	
+	<div>
+		<p class="yangTitle">안녕하세요 양호석의 게시판입니다</p>
+	</div>
+	<form id="frm" name="frm">
+		<input type="hidden" id="tabId" name="tabId">
+		<input type="hidden" id="tabUri" name="tabUri">
+		<input type="hidden" id="tabIdx" name="tabIdx">
+		<input type="hidden" id="tabName" name="tabName">
+	</form>
+	
+	<a href="#" id="forecast" onclick="f_doSubmit(id);">동네예보</a>
+	<a href="#" id="map" onclick="f_doSubmit(id);">지도</a>
+	<a href="#" id="personal" onclick="f_doSubmit(id);">개인화</a>
+	<!-- <div id="tabs" class="tabs">
+		<nav>
+			<ul id="nav">
+				<li th:if="${#lists.size(list)} > 0" th:each="list : ${list}">
+					<a href="#" th:id="${list.tabId}" onclick="javascript:f_openTab(id);" th:text="${list.tabName}"> </a>	
+					<input type="hidden" th:id= "'tabIdx' + ${list.tabIdx}" th:name="'tabIdx' + ${list.tabIdx}" th:value="${list.tabIdx}"/>
+				</li>
+			</ul>
+		</nav>
+	</div> -->
+	<div id="contents">
+		<iframe id="iframe01" class="iframe" name="iframe01" style="border:none;overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:100%;width:100%;position:relative;">
+		</iframe>
+	</div>
+	
+	
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Yang's Map</title>
+   	<link rel="stylesheet" th:href="@{/css/leaflet/leaflet.css}"/>
+   	
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="/webjars/jquery/3.4.1/jquery.js"></script>
+    <script th:src="@{/js/jquery.xml2json.js}"></script>
+ 	<script th:src="@{/js/leaflet/leaflet-src.js}"></script>
+    <!-- leaflet canvas -->
+    <script th:src="@{/js/leaflet/leaflet.canvas-markers.js}"></script>
+    
+    <!-- leaflet WindBarb(바람 일기도 기호 Libaray) -->
+    <script th:src="@{/js/leaflet-windbarb/leaflet-windbarb.js}"></script>
+    
+    <script th:src="@{/js/leaflet-draw/Leaflet.draw.js}"></script>
+    <script th:src="@{/js/leaflet-draw/Leaflet.Draw.Event.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/leaflet-draw/leaflet.draw.css}"/>
+
+    <script th:src="@{/js/leaflet-draw/Toolbar.js}"></script>
+    <script th:src="@{/js/leaflet-draw/Tooltip.js}"></script>
+
+    <script th:src="@{/js/leaflet-draw/ext/GeometryUtil.js}"></script>
+    <script th:src="@{/js/leaflet-draw/ext/LatLngUtil.js}"></script>
+    <script th:src="@{/js/leaflet-draw/ext/LineUtil.Intersect.js}"></script>
+    <script th:src="@{/js/leaflet-draw/ext/Polygon.Intersect.js}"></script>
+    <script th:src="@{/js/leaflet-draw/ext/Polyline.Intersect.js}"></script>
+    <script th:src="@{/js/leaflet-draw/ext/TouchEvents.js}"></script>
+
+    <script th:src="@{/js/leaflet-draw/draw/DrawToolbar.js}"></script>
+    <script th:src="@{/js/leaflet-draw/draw/handler/Draw.Feature.js}"></script>
+    <script th:src="@{/js/leaflet-draw/draw/handler/Draw.SimpleShape.js}"></script>
+    <script th:src="@{/js/leaflet-draw/draw/handler/Draw.Polyline.js}"></script>
+    <script th:src="@{/js/leaflet-draw/draw/handler/Draw.Marker.js}"></script>
+    <script th:src="@{/js/leaflet-draw/draw/handler/Draw.Circle.js}"></script>
+    <script th:src="@{/js/leaflet-draw/draw/handler/Draw.CircleMarker.js}"></script>
+    <script th:src="@{/js/leaflet-draw/draw/handler/Draw.Polygon.js}"></script>
+    <script th:src="@{/js/leaflet-draw/draw/handler/Draw.Rectangle.js}"></script>
+
+
+    <script th:src="@{/js/leaflet-draw/edit/EditToolbar.js}"></script>
+    <script th:src="@{/js/leaflet-draw/edit/handler/EditToolbar.Edit.js}"></script>
+    <script th:src="@{/js/leaflet-draw/edit/handler/EditToolbar.Delete.js}"></script>
+
+    <script th:src="@{/js/leaflet-draw/Control.Draw.js}"></script>
+
+    <script th:src="@{/js/leaflet-draw/edit/handler/Edit.Poly.js}"></script>
+    <script th:src="@{/js/leaflet-draw/edit/handler/Edit.SimpleShape.js}"></script>
+    <script th:src="@{/js/leaflet-draw/edit/handler/Edit.Rectangle.js}"></script>
+    <script th:src="@{/js/leaflet-draw/edit/handler/Edit.Marker.js}"></script>
+    <script th:src="@{/js/leaflet-draw/edit/handler/Edit.CircleMarker.js}"></script>
+    <script th:src="@{/js/leaflet-draw/edit/handler/Edit.Circle.js}"></script>
+    
+	<!-- stn Test Data -->
+	<script th:src="@{/js/map/stnTestData.js}"></script>
+	
+	<!-- Region Data -->
+	<script th:src="@{/js/map/regionData.js}"></script>
+	
+    <!-- drawing Map -->
+    <script th:src="@{/js/map/drawStnMarker.js}"></script>
+	
+	
+	<script type="text/javascript">
+		var baseMap, map;
+		$(document).ready(function(){
+			$('#date').val(new Date().toLocaleString("kr").substring(0,11));
+			//new Date().toLocaleString("kr").substring(0,11).replaceAll(' ' , '')
+			
+			baseMap = new BaseMap();
+			map = baseMap.init("mapid");
+			//baseMap.drawCityDot();
+			//baseMap.drawWindBarb();
+			submit();
+		});
+		
+		
+		function submit(){
+		    var date = new Date();
+		    var year = date.getFullYear();
+		    var month = date.getMonth()+1
+		    var day = date.getDate();
+		    if(month < 10){
+		        month = "0"+month;
+		    }
+		    if(day < 10){
+		        day = "0"+day;
+		    }
+		 
+		    var baseDate = year+""+month+""+day;
+			var baseTime = $('#baseTime').val();
+			
+			baseMap.refresh(baseDate, baseTime);
+		}
+	</script>
+	<style type="text/css">
+	
+	.leaflet-div-icon {
+    /* background: #fff; */
+    /* border: 1px solid #666; */
+		margin-left: -20px;
+    	margin-top: -20px;
+	}
+	
+	.weatherIcon{
+		width:20px;
+	}
+	</style>
+</head>
+<body>
+	<span>동네예보</span>
+	<table border="1">
+		<tbody>
+			<tr>
+				<td>Today</td>
+				<td><input id="date" type="text" readonly value=""></td>
+				<td>시간</td>
+				<td>
+					<select id="baseTime" name="baseTime" onchange="submit();">
+						<option value="0200" selected>06시</option>
+						<option value="0500">09시</option>
+						<option value="0800">12시</option>
+						<option value="1100">15시</option>
+						<option value="1400">18시</option>
+						<option value="1700">21시</option>
+						<option value="2000">24시</option>
+						<option value="2300">익일03시</option>
+					</select>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	 <div id="mapid" style="height:700px; width:700px;"></div>
+</body>
+</html>

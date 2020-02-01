@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Yang's Map</title>
+   	<link rel="stylesheet" th:href="@{/css/leaflet/leaflet.css}"/>
+   	
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="/webjars/jquery/3.4.1/jquery.js"></script>
+    <script th:src="@{/js/jquery.xml2json.js}"></script>
+ 	<script th:src="@{/js/leaflet/leaflet-src.js}"></script>
+ 	
+	<!-- Rbush --> 	
+ 	<script th:src="@{/js/rbush.js}"></script>
+    <!-- leaflet CanvasIcon -->
+    <script th:src="@{/js/leaflet-canvasmarker/leaflet.canvas-markers.js}"></script>
+    
+    <!-- leaflet WindBarb(바람 일기도 기호 Libaray) -->
+    <script th:src="@{/js/leaflet-windbarb/leaflet-windbarb.js}"></script>
+	
+	<!-- leaflet Custom-layer -->
+    <script th:src="@{/js/leaflet-customlayer/Leaflet.CustomLayer.js}"></script>
+	
+	<!-- leaflet Draw Library -->    
+    <script th:src="@{/js/leaflet-draw/Leaflet.draw.js}"></script>
+    <script th:src="@{/js/leaflet-draw/Leaflet.Draw.Event.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/leaflet-draw/leaflet.draw.css}"/>
+
+    <script th:src="@{/js/leaflet-draw/Toolbar.js}"></script>
+    <script th:src="@{/js/leaflet-draw/Tooltip.js}"></script>
+
+    <script th:src="@{/js/leaflet-draw/ext/GeometryUtil.js}"></script>
+    <script th:src="@{/js/leaflet-draw/ext/LatLngUtil.js}"></script>
+    <script th:src="@{/js/leaflet-draw/ext/LineUtil.Intersect.js}"></script>
+    <script th:src="@{/js/leaflet-draw/ext/Polygon.Intersect.js}"></script>
+    <script th:src="@{/js/leaflet-draw/ext/Polyline.Intersect.js}"></script>
+    <script th:src="@{/js/leaflet-draw/ext/TouchEvents.js}"></script>
+
+    <script th:src="@{/js/leaflet-draw/draw/DrawToolbar.js}"></script>
+    <script th:src="@{/js/leaflet-draw/draw/handler/Draw.Feature.js}"></script>
+    <script th:src="@{/js/leaflet-draw/draw/handler/Draw.SimpleShape.js}"></script>
+    <script th:src="@{/js/leaflet-draw/draw/handler/Draw.Polyline.js}"></script>
+    <script th:src="@{/js/leaflet-draw/draw/handler/Draw.Marker.js}"></script>
+    <script th:src="@{/js/leaflet-draw/draw/handler/Draw.Circle.js}"></script>
+    <script th:src="@{/js/leaflet-draw/draw/handler/Draw.CircleMarker.js}"></script>
+    <script th:src="@{/js/leaflet-draw/draw/handler/Draw.Polygon.js}"></script>
+    <script th:src="@{/js/leaflet-draw/draw/handler/Draw.Rectangle.js}"></script>
+
+
+    <script th:src="@{/js/leaflet-draw/edit/EditToolbar.js}"></script>
+    <script th:src="@{/js/leaflet-draw/edit/handler/EditToolbar.Edit.js}"></script>
+    <script th:src="@{/js/leaflet-draw/edit/handler/EditToolbar.Delete.js}"></script>
+
+    <script th:src="@{/js/leaflet-draw/Control.Draw.js}"></script>
+
+    <script th:src="@{/js/leaflet-draw/edit/handler/Edit.Poly.js}"></script>
+    <script th:src="@{/js/leaflet-draw/edit/handler/Edit.SimpleShape.js}"></script>
+    <script th:src="@{/js/leaflet-draw/edit/handler/Edit.Rectangle.js}"></script>
+    <script th:src="@{/js/leaflet-draw/edit/handler/Edit.Marker.js}"></script>
+    <script th:src="@{/js/leaflet-draw/edit/handler/Edit.CircleMarker.js}"></script>
+    <script th:src="@{/js/leaflet-draw/edit/handler/Edit.Circle.js}"></script>
+    
+	<!-- stn Test Data -->
+	<script th:src="@{/js/map/customLayerTestData.js}"></script>
+	
+    <!-- drawing Map -->
+    <script th:src="@{/js/map/canvasIconTest.js}"></script>
+	
+	
+	<script type="text/javascript">
+		var baseMap, map;
+		$(document).ready(function(){
+			$('#date').val(new Date().toLocaleString("kr").substring(0,11));
+			//new Date().toLocaleString("kr").substring(0,11).replaceAll(' ' , '')
+			
+			baseMap = new BaseMap();
+			map = baseMap.init("mapid");
+			baseMap.makeLayer();
+		});
+		
+		
+	</script>
+	<style type="text/css">
+	
+	.leaflet-div-icon {
+    /* background: #fff; */
+    /* border: 1px solid #666; */
+		margin-left: -20px;
+    	margin-top: -20px;
+	}
+	
+	.weatherIcon{
+		width:20px;
+	}
+	</style>
+</head>
+<body>
+	<span>Leaflet Test</span>
+	 <div id="mapid" style="height:700px; width:700px;"></div>
+</body>
+</html>

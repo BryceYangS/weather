@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board.mapper.personal.PersonalMapper">
+
+	<!-- 
+	List<IntDstDto> selectIntDstList() throws Exception;
+	void insertIntDst(IntDstDto intDst) throws Exception;
+	void updateIntDst(IntDstDto intDst) throws Exception;
+	IntDstDto selectIntDstDetail(String intDstId) throws Exception;
+	void deleteIntDst(String intDstId) throws Exception;
+	 -->
+	<select id="selectIntDstList" resultType="board.dto.personal.IntDstDto">
+		<![CDATA[
+			SELECT int_dst_id,
+				   int_dst_name,
+				   cnt_lat,
+				   cnt_lon,
+				   zoom_lvl
+			FROM int_dst
+			WHERE deleted_yn = 'N'
+			ORDER BY int_dst_id ASC		
+		]]>
+	</select>
+	
+	<insert id="insertIntDst" parameterType="board.dto.personal.IntDstDto">
+		<![CDATA[
+			INSERT INTO int_dst(
+				int_dst_id,
+				int_dst_name,
+				cnt_lat,
+				cnt_lon,
+				zoom_lvl,
+			    int_stn_dst_top_lat,
+			    int_stn_dst_left_lon,
+			    int_stn_dst_bottom_lat,
+			    int_stn_dst_right_lon
+				)
+			VALUES(
+				#{intDstId},
+				#{intDstName},
+				#{cntLat},
+				#{cntLon},
+				#{zoomLvl},
+				#{intStnDstBottomLat},
+				#{intStnDstTopLat},   
+			    #{intStnDstRightLon}, 
+			    #{intStnDstLeftLon}   
+			)
+		]]>
+	</insert>
+	
+	<update id="updateIntDst" parameterType="board.dto.personal.IntDstDto">
+		<![CDATA[
+			UPDATE int_dst
+			SET	   int_dst_name = #{intDstName},
+				   cnt_lat  = #{cntLat},
+				   cnt_lon  = #{cntLon},
+				   zoom_lvl = #{zoomLvl},
+   				   int_stn_dst_top_lat =    #{intStnDstBottomLat}, 
+				   int_stn_dst_left_lon =   #{intStnDstTopLat},    
+				   int_stn_dst_bottom_lat = #{intStnDstRightLon},  
+				   int_stn_dst_right_lon =  #{intStnDstLeftLon}   
+		  	WHERE int_dst_id = #{intDstId}
+		]]>
+	</update>
+	
+	<select id="selectIntDstDetail" parameterType="String" resultType="board.dto.personal.IntDstDto">
+		<![CDATA[
+			SELECT int_dst_id,
+				   int_dst_name,
+				   cnt_lat,
+				   cnt_lon,
+				   zoom_lvl,
+				   int_stn_dst_top_lat,
+				   int_stn_dst_left_lon,
+				   int_stn_dst_bottom_lat,
+				   int_stn_dst_right_lon
+			FROM int_dst
+			WHERE deleted_yn = 'N'
+			AND	  int_dst_id = #{intDstId}
+		]]>
+	</select>
+	
+	
+	<update id="deleteIntDst" parameterType="String">
+		<![CDATA[
+			UPDATE int_dst
+			SET    deleted_yn = 'Y'
+		    WHERE int_dst_id = #{intDstId}
+		]]>
+	</update>
+	
+	
+</mapper>
