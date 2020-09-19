@@ -224,7 +224,8 @@ var BaseMap = (function(){
 			//동네예보 Data 조회(지점 수 만큼 ajax 반복)
 			_getData : function(){
 				var self = this;
-				
+				self.data = []
+
 				for(var i=0; i<scatterdRegionInfo.length; i++){
 					var regionItem = scatterdRegionInfo[i];
 
@@ -238,7 +239,7 @@ var BaseMap = (function(){
 							},
 		                async: false,
 					}).done(function(data){
-						if(data.response.header.resultCode =="0000"){//data 성공
+						if(data.response.header.resultCode =="00"){//data 성공
 							console.log(data);
 							self.data.push(data.response.body.items.item); 
 							/*  
@@ -254,6 +255,8 @@ var BaseMap = (function(){
 				          	},{},.. 
 				          	]
 				          */
+						}else{
+						    alert('단기예보가 내려지지 않았습니다.');
 						}
 					})
 					.fail(function(e){console.log(e)});

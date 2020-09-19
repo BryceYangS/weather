@@ -7,6 +7,8 @@ import java.net.URL;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.JSONObject;
+import org.json.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -42,13 +44,14 @@ public class LeafletController {
 	
 	@RequestMapping(value="/leaflet/getWeatherData.do", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody String getWeatherData(HttpServletRequest req) throws Exception{
-		String urlStr = "http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastSpaceData?ServiceKey=fdAVKmTWvb4BL9fpuPUn%2BcKBo%2BgFfqhai4FaWaaLhqRnxAOr23KFMsnMfGAFpilBD0uLeEGL8As96NS0uNQd7g%3D%3D";
+
+		String urlStr = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst?serviceKey=fdAVKmTWvb4BL9fpuPUn%2BcKBo%2BgFfqhai4FaWaaLhqRnxAOr23KFMsnMfGAFpilBD0uLeEGL8As96NS0uNQd7g%3D%3D";
 		urlStr += "&base_date=";
 		urlStr +=  req.getParameter("baseDate");
 		urlStr += "&base_time=" + req.getParameter("baseTime");
 		urlStr += "&nx=" + req.getParameter("x");
 		urlStr += "&ny=" + req.getParameter("y");
-		urlStr += "&_type=json";
+//		urlStr += "&_type=json";
 		log.debug(urlStr);
 		BufferedReader br = null;
 		
@@ -61,9 +64,12 @@ public class LeafletController {
 		while((line=br.readLine()) != null) {
 			result += line;
 		}
-		log.debug(result);
-		
-		return result;
+
+		JSONObject xmlJsonObj = XML.toJSONObject(result);
+//		log.debug("--------------xmlJSON");
+//		log.debug(String.valueOf(xmlJsonObj));
+
+		return String.valueOf(xmlJsonObj);
 	}
 	
 	
